@@ -8,7 +8,7 @@ blogRouter.get('/', (req, res) => {
 });
 
 blogRouter.post('/', (req, res, next) => {
-  const body = req.body;
+  const { body } = req.body;
 
   const blog = new Blog({
     title: body.title,

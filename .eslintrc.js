@@ -5,9 +5,17 @@ module.exports = {
     node: true,
     jest: true,
   },
-  extends: ['airbnb-base'],
+  extends: 'eslint:recommended',
   parserOptions: {
     ecmaVersion: 12,
   },
-  rules: {},
+  rules: {
+    indent: ['error', 2],
+    'linebreak-style': ['error', 'unix'],
+    quotes: ['error', 'single'],
+    semi: ['error', 'always'],
+  },
+  jest: {
+    testEnvironment: 'node',
+  },
 };

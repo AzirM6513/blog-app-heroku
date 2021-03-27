@@ -23,19 +23,19 @@ describe('blog api GET', () => {
       .expect('Content-Type', /application\/json/);
   });
 
-  test('returns correct number of blogs in Database', async () => {
+  test('correct number of blogs in Database', async () => {
     const res = await api.get('/api/blogs');
     expect(res.body).toHaveLength(helper.initialBlogs.length);
   });
 
-  test('response contains specific blog', async () => {
+  test('specific blog exists', async () => {
     const res = await api.get('/api/blogs');
 
     const titles = res.body.map((r) => r.title);
     expect(titles).toContain('First class tests');
   });
 
-  test('verify blog uses id over _id', async () => {
+  test('verify blog swaps id for _id', async () => {
     const blogsAtStart = await helper.blogsInDb();
 
     const blogToView = blogsAtStart[0];
@@ -49,7 +49,7 @@ describe('blog api GET', () => {
 });
 
 describe('blog api POST', () => {
-  test('api can create valid blog entrys', async () => {
+  test('create valid blog entry', async () => {
     const newBlog = {
       title: 'React patterns',
       author: 'Michael Chan',
@@ -70,7 +70,7 @@ describe('blog api POST', () => {
     expect(titles).toContain(newBlog.title);
   });
 
-  test('likes default to zero if none provided', async () => {
+  test('likes default to zero when none provided', async () => {
     const newBlog = {
       title: 'React patterns',
       author: 'Michael Chan',
@@ -85,6 +85,18 @@ describe('blog api POST', () => {
 
     expect(res.body.likes).toBeDefined();
     expect(res.body.likes).toBe(0);
+  });
+
+  test('malformed blog fails to POST', async () => {
+    const newBlog = {
+      author: 'Michael Chan',
+    };
+
+    const res = await api.post('/api/blogs').send(newBlog).expect(400);
+
+    expect(res.text).toBe(
+      '{"error":"Blog validation failed: title: Path `title` is required., url: Path `url` is required."}'
+    );
   });
 });
 

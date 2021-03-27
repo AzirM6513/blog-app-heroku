@@ -46,6 +46,10 @@ describe('blog api GET', () => {
 
     expect(resultBlog.body.id).toBeDefined();
   });
+
+  test('invalid id return status code 400', async () => {
+    await api.get(`/api/blogs/${'03400fsdjf399'}`).expect(400);
+  });
 });
 
 describe('blog api POST', () => {
@@ -97,6 +101,53 @@ describe('blog api POST', () => {
     expect(res.text).toBe(
       '{"error":"Blog validation failed: title: Path `title` is required., url: Path `url` is required."}'
     );
+  });
+});
+
+describe('blog api PUT', () => {
+  test('can update valid blog', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToUpdate = blogsAtStart[0];
+
+    const blogToSend = {
+      author: blogToUpdate.author,
+      title: blogToUpdate.title,
+      url: blogToUpdate.url,
+      likes: blogToUpdate.likes + 1,
+    };
+
+    const res = await api
+      .put(`/api/blogs/${blogToUpdate.id}`)
+      .send(blogToSend)
+      .expect(200);
+
+    expect(res.body.likes).toBe(blogToUpdate.likes + 1);
+  });
+
+  test('fails to update invalid blog with response 404', async () => {
+    const newBlog = {
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+      likes: 10,
+    };
+
+    const res = await api
+      .put(`/api/blogs/${'324003429fdf'}`)
+      .send(newBlog)
+      .expect(404);
+
+    expect(res.text).toBe('{"error":"Cannot update nonexistent resource"}');
+  });
+});
+
+describe('blog api DELETE', () => {
+  test('can delete existing blog', async () => {
+    const blogsAtStart = await helper.blogsInDb();
+    const blogToDelete = blogsAtStart[0].id;
+
+    await api.delete(`/api/blogs/${blogToDelete}`).expect(204);
+    await api.get(`/api/blogs/${blogToDelete}`).expect(404);
   });
 });
 

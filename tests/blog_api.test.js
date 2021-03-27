@@ -54,6 +54,7 @@ describe('blog api POST', () => {
       title: 'React patterns',
       author: 'Michael Chan',
       url: 'https://reactpatterns.com/',
+      likes: 10,
     };
 
     await api
@@ -67,6 +68,23 @@ describe('blog api POST', () => {
 
     const titles = blogsAtEnd.map((b) => b.title);
     expect(titles).toContain(newBlog.title);
+  });
+
+  test('likes default to zero if none provided', async () => {
+    const newBlog = {
+      title: 'React patterns',
+      author: 'Michael Chan',
+      url: 'https://reactpatterns.com/',
+    };
+
+    const res = await api
+      .post('/api/blogs')
+      .send(newBlog)
+      .expect(200)
+      .expect('Content-Type', /application\/json/);
+
+    expect(res.body.likes).toBeDefined();
+    expect(res.body.likes).toBe(0);
   });
 });
 

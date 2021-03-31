@@ -21,10 +21,30 @@ const errorHandler = (error, req, res, next) => {
       .json({ error: 'Cannot update nonexistent resource' });
   }
 
-  return next(error);
+  if (error.name === 'JsonWebTokenError') {
+    return response.status(401).json({ error: 'invalid token' });
+  }
+
+  if (error.name === 'TokenExpiredError') {
+    return response.status(401).json({ error: 'token expired' });
+  }
+
+  next(error);
+};
+
+const tokenExtractor = (req, res, next) => {
+  const authorization = req.get('authorization');
+  if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
+    req.token = authorization.substring(7);
+    return next();
+  }
+
+  req.token = null;
+  next(req.error);
 };
 
 module.exports = {
   unknownEndpoint,
   errorHandler,
+  tokenExtractor,
 };

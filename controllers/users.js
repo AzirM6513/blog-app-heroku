@@ -38,4 +38,9 @@ usersRouter.get('/', async (req, res) => {
   res.json(users);
 });
 
+usersRouter.get('/:id', async (req, res) => {
+  const user = await User.findById(req.params.id);
+  return res.json(user);
+});
+
 module.exports = usersRouter;

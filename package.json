@@ -18,7 +18,8 @@
     "dev": "cross-env NODE_ENV=development nodemon index.js",
     "test": "cross-env NODE_ENV=test jest --verbose",
     "lint": "eslint .",
-    "build:ui": "rm -rf build && cd ../frontend && npm run build --prod && cp -r build ../backend"
+    "build:ui": "rm -rf build && cd ../frontend && npm run build --prod && cp -r build ../backend",
+    "start:test": "cross-env NODE_ENV=test node index.js"
   },
   "author": "",
   "license": "MIT",

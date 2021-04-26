@@ -10,7 +10,7 @@
 Blog App used to teach me fundamental concepts in web development.
 
 ## Getting Started <a name = "getting_started"></a>
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
+These instructions will get you a copy of the project on your local machine.
 
 ### Prerequisites
 
@@ -56,7 +56,11 @@ For seperate repo of front end for testing or forks go to [frontend repo](https:
 
 ## Usage <a name = "usage"></a>
 Login to application using default values given on startup.
+
 Login is persisntant as token info is saved locally.
+
 Click create tab to create a new post.
+
 Click the respective like or dislike buttons to add likes or dislikes.
+
 Click Blog title to get more info.

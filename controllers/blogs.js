@@ -35,6 +35,7 @@ blogRouter.post('/', async (req, res) => {
     url: body.url,
     likes: body.likes || 0,
     dislikes: body.dislikes || 0,
+    comments: body.comments || [],
     user: user._id,
   });
 
@@ -54,6 +55,7 @@ blogRouter.put('/:id', async (req, res) => {
     url: body.url,
     likes: body.likes,
     dislikes: body.dislikes,
+    comments: body.comments,
   };
 
   const updatedBlog = await Blog.findByIdAndUpdate(req.params.id, blog, {
